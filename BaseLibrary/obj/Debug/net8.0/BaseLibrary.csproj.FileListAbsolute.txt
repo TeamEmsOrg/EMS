@@ -1,0 +1,12 @@
+/Users/sagar/work/EmployeeManagementsystem/BaseLibrary/bin/Debug/net8.0/BaseLibrary.deps.json
+/Users/sagar/work/EmployeeManagementsystem/BaseLibrary/bin/Debug/net8.0/BaseLibrary.dll
+/Users/sagar/work/EmployeeManagementsystem/BaseLibrary/bin/Debug/net8.0/BaseLibrary.pdb
+/Users/sagar/work/EmployeeManagementsystem/BaseLibrary/obj/Debug/net8.0/BaseLibrary.csproj.AssemblyReference.cache
+/Users/sagar/work/EmployeeManagementsystem/BaseLibrary/obj/Debug/net8.0/BaseLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/Users/sagar/work/EmployeeManagementsystem/BaseLibrary/obj/Debug/net8.0/BaseLibrary.AssemblyInfoInputs.cache
+/Users/sagar/work/EmployeeManagementsystem/BaseLibrary/obj/Debug/net8.0/BaseLibrary.AssemblyInfo.cs
+/Users/sagar/work/EmployeeManagementsystem/BaseLibrary/obj/Debug/net8.0/BaseLibrary.csproj.CoreCompileInputs.cache
+/Users/sagar/work/EmployeeManagementsystem/BaseLibrary/obj/Debug/net8.0/BaseLibrary.dll
+/Users/sagar/work/EmployeeManagementsystem/BaseLibrary/obj/Debug/net8.0/refint/BaseLibrary.dll
+/Users/sagar/work/EmployeeManagementsystem/BaseLibrary/obj/Debug/net8.0/BaseLibrary.pdb
+/Users/sagar/work/EmployeeManagementsystem/BaseLibrary/obj/Debug/net8.0/ref/BaseLibrary.dll
