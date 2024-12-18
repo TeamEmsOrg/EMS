@@ -24,4 +24,13 @@ public class AuthenticationController(IUserAccount accountInterface) : Controlle
         var result = await accountInterface.SigninAsync(user);
         return Ok(result);
     }
+
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> RefreshTokenAsync(RefreshToken refreshToken)
+    {
+        if (refreshToken == null) return BadRequest("Refresh token is null, Model is empty!");
+         var result = await accountInterface.RefreshTokenAsync(refreshToken);
+         return Ok(result);
+        
+    }
 }
