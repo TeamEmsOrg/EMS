@@ -1,4 +1,5 @@
 using BaseLibrary.DTOs;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using ServerLibrary.Repositories.Contracts;
 
@@ -13,6 +14,14 @@ public class AuthenticationController(IUserAccount accountInterface) : Controlle
     {
         if (user == null) return BadRequest("User is null");
         var result = await accountInterface.CreateAsync(user);
+        return Ok(result);
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> LoginAsync(Login user)
+    {
+        if (user == null) return BadRequest("User is null");
+        var result = await accountInterface.SigninAsync(user);
         return Ok(result);
     }
 }
