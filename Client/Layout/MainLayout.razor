@@ -15,12 +15,6 @@
                         Logout
                     </button>
                 </Authorized>
-                <NotAuthorized>
-                    <div class="flex gap-4">
-                        <a href="identity/account/login" class="px-4 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors">Sign In</a>
-                        <a href="identity/account/register" class="px-4 py-2 text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 rounded-md transition-colors">Register</a>
-                    </div>
-                </NotAuthorized>
             </AuthorizeView>
         </div>
         <article class="content px-4">
@@ -41,7 +35,7 @@
         var logoutModel = new UserSession();
         var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthStateProvider;
         await customAuthStateProvider.UpdateAuthenticationState(logoutModel);
-        Navigation.NavigateTo("/", forceLoad: true);
+        Navigation.NavigateTo("/identity/account/login", forceLoad: true);
     }
 
 }

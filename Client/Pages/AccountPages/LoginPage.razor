@@ -37,14 +37,30 @@
             </div>
 
             <div>
-                <button type="submit" 
-                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                @if (ShowLoadingButton)
+                {
+                    <ButtonLoadingSpinner></ButtonLoadingSpinner> 
+                }
+                else
+                {
+                <button type="submit"
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
                     <span class="mr-2">Sign in</span>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"/>
                     </svg>
                 </button>
+                }
             </div>
+
+            
+            <div class="text-center mt-4">
+                <span class="text-sm text-gray-600">Don't have an account? </span>
+                <a href="/identity/account/register" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
+                    Register here
+                </a>
+            </div>
+
         </EditForm>
     </div>
 <!-- </div> -->
@@ -52,6 +68,7 @@
 
 
 @code{
+    private bool ShowLoadingButton = false;
     Login User = new();
     public async Task HandleLogin()
     {
