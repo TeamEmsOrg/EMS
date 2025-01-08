@@ -1,4 +1,4 @@
-﻿@inject NavigationManager Navigation
+﻿@inherits LayoutComponentBase
 <div class="page">
     <div class="sidebar">
         <NavMenu/>
@@ -6,14 +6,33 @@
 
     <main>
         <div class="top-row px-4">
-            <a class="btn btn-none" href="identity/account/login">Sign In</a>
-            <a class="btn btn-none" href="identity/account/register">Register</a>
-            <a class="btn btn-none text-danger" @onclick="LogoutClicked">Logout</a>
+            <AuthorizeView>
+                <Authorized>
+                    <button @onclick="LogoutClicked" class="flex items-center px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Logout
+                    </button>
+                </Authorized>
+                <NotAuthorized>
+                    <div class="flex gap-4">
+                        <a href="identity/account/login" class="px-4 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors">Sign In</a>
+                        <a href="identity/account/register" class="px-4 py-2 text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 rounded-md transition-colors">Register</a>
+                    </div>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
         <article class="content px-4">
             @Body
         </article>
     </main>
+</div>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
 </div>
 
 @code{

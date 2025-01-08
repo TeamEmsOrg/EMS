@@ -1,4 +1,7 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ServerLibrary.Data;
 using ServerLibrary.Helpers;
@@ -29,6 +32,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.Configure<JwtSection>(builder.Configuration.GetSection("JwtSection"));
+var jwtSection = builder.Configuration.GetSection(nameof(JwtSection)).Get<JwtSection>();
 //starting
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -36,13 +41,29 @@ builder.Services.AddDbContext<AppDbContext>(options =>
                          throw new InvalidOperationException("Connection string not found"));
 });
 
-builder.Services.Configure<JwtSection>(builder.Configuration.GetSection("JwtSection"));
 builder.Services.AddScoped<IUserAccount, UserAccountRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorWasm",
-        builder => builder.WithOrigins("https://localhost:7026", "http://localhost:5026").AllowAnyMethod()
+        builder => builder.WithOrigins("https://localhost:7098", "http://localhost:5026").AllowAnyMethod()
             .AllowAnyHeader().AllowCredentials());
+});
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateIssuerSigningKey = true,
+        ValidateLifetime = true,
+        ValidIssuer = jwtSection!.Issuer,
+        ValidAudience = jwtSection!.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection!.Key))
+    };
 });
 var app = builder.Build();
 
@@ -54,6 +75,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowBlazorWasm");
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();

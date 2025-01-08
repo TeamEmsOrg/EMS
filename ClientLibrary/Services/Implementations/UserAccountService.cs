@@ -28,13 +28,17 @@ public class UserAccountService(GetHttpClient getHttpClient) : IUserAccountServi
 
     public async Task<LoginResponse> RefreshTokenAsync(RefreshToken token)
     {
-        throw new NotImplementedException();
+        var httpClient = getHttpClient.GetPublicHttpClient();
+        var result = await httpClient.PostAsJsonAsync($"{AuthUrl}/refresh-token", token);
+        if(!result.IsSuccessStatusCode) return new LoginResponse(false, "Failed to register user Error occured");
+        return await result.Content.ReadFromJsonAsync<LoginResponse>()!;
     }
 
-    public async Task<WeatherForecast[]> GetWeatherForecastsAsync()
+    public async Task<WeatherForecast[]> GetWeatherForecastAsync()
     {
         var httpClient = await getHttpClient.GetPrivateHttpClient();
-        var result = await httpClient.GetFromJsonAsync<WeatherForecast[]>($"api/weatherforecast");
+        var result = await httpClient.GetFromJsonAsync<WeatherForecast[]>($"api/weatherForecast");
         return result;
     }
+ 
 }

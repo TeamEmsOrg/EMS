@@ -22,5 +22,6 @@
     <ItemGroup>
       <Folder Include="Services\Contracts\" />
       <Folder Include="Services\Implementations\" />
+      <Folder Include="wwwroot\images\background\" />
     </ItemGroup>
 </Project>
