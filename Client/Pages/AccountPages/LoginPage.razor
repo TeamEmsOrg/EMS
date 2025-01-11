@@ -1,48 +1,52 @@
 @page "/identity/account/login"
+@using Client.Pages.OtherPages
+@using Client.Services
 @layout AuthenticationLayout
 
-<!-- <div class="min-h-screen bg-gradient-to-br from-indigo-100 to-blue-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center"> -->
-    <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl">
-        <div>
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Welcome Back!</h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
-                Sign in to access your account
-            </p>
-        </div>
-        
-        <EditForm Model="User" OnValidSubmit="HandleLogin" FormName="login" class="mt-8 space-y-6">
-            <DataAnnotationsValidator/>
-            <ValidationSummary class="text-red-500 text-sm rounded-lg bg-red-50 p-3"/>
-            
-            <div class="space-y-6">
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
-                    <div class="mt-1">
-                        <InputText id="email" @bind-Value="User.Email"
-                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            placeholder="Enter your email"/>
-                        <ValidationMessage For="@(() => User.Email)" class="text-red-500 text-sm mt-1"/>
-                    </div>
-                </div>
+@inject SnackbarService SnackbarService
 
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <div class="mt-1">
-                        <InputText type="password" id="password" @bind-Value="User.Password"
-                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            placeholder="Enter your password"/>
-                        <ValidationMessage For="@(() => User.Password)" class="text-red-500 text-sm mt-1"/>
-                    </div>
+<!-- <div class="min-h-screen bg-gradient-to-br from-indigo-100 to-blue-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center"> -->
+<div class="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl">
+    <div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Welcome Back!</h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+            Sign in to access your account
+        </p>
+    </div>
+
+    <EditForm Model="User" OnValidSubmit="HandleLogin" FormName="login" class="mt-8 space-y-6">
+        <DataAnnotationsValidator/>
+        <ValidationSummary class="text-red-500 text-sm rounded-lg bg-red-50 p-3"/>
+
+        <div class="space-y-6">
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                <div class="mt-1">
+                    <InputText id="email" @bind-Value="User.Email"
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                               placeholder="Enter your email"/>
+                    <ValidationMessage For="@(() => User.Email)" class="text-red-500 text-sm mt-1"/>
                 </div>
             </div>
 
             <div>
-                @if (ShowLoadingButton)
-                {
-                    <ButtonLoadingSpinner></ButtonLoadingSpinner> 
-                }
-                else
-                {
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <div class="mt-1">
+                    <InputText type="password" id="password" @bind-Value="User.Password"
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                               placeholder="Enter your password"/>
+                    <ValidationMessage For="@(() => User.Password)" class="text-red-500 text-sm mt-1"/>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            @if (ShowLoadingButton)
+            {
+                <ButtonLoadingSpinner></ButtonLoadingSpinner>
+            }
+            else
+            {
                 <button type="submit"
                         class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
                     <span class="mr-2">Sign in</span>
@@ -50,36 +54,39 @@
                         <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"/>
                     </svg>
                 </button>
-                }
-            </div>
+            }
+        </div>
 
-            
-            <div class="text-center mt-4">
-                <span class="text-sm text-gray-600">Don't have an account? </span>
-                <a href="/identity/account/register" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
-                    Register here
-                </a>
-            </div>
 
-        </EditForm>
-    </div>
+        <div class="text-center mt-4">
+            <span class="text-sm text-gray-600">Don't have an account? </span>
+            <a href="/identity/account/register" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
+                Register here
+            </a>
+        </div>
+
+    </EditForm>
+</div>
 <!-- </div> -->
-
 
 
 @code{
     private bool ShowLoadingButton = false;
     Login User = new();
+    
     public async Task HandleLogin()
     {
+        ShowLoadingButton = true;
         var result = await accountService.SignInAsync(User);
         if (result.Flag)
         {
+            SnackbarService.ShowSnackbar("You are logged in Successfully!", "Success");
             var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthStateProvider;
             await customAuthStateProvider.UpdateAuthenticationState(new UserSession() { Token = result.Token, RefreshToken = result.RefreshToken });
-            Navigation.NavigateTo("/",forceLoad : true);
+            Navigation.NavigateTo("/", forceLoad: true);
         }
-        
+
+        ShowLoadingButton = false;
     }
 
 }

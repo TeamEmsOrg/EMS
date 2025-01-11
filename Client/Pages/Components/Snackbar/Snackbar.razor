@@ -1,0 +1,63 @@
+@using Client.Services
+@inject SnackbarService SnackbarService
+
+<div class="w-96 h-32 fixed bottom-0 right-4  duration-300 ease-in-out"  style="z-index: 1000002;" @onclick="CloseSnackbar">
+    @if (isVisible)
+    {
+        <div class="flex items-center px-4 py-2 rounded shadow-lg @snackbarClass">
+            <span>@message</span>
+        </div>
+    }
+</div>
+
+@code {
+    private bool isVisible { get; set; } = false;
+    private string message = string.Empty;
+    private string snackbarClass = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        SnackbarService.OnShow += ShowSnackbar;
+        SnackbarService.OnHide += HideSnackbar;
+    }
+    
+
+    private void ShowSnackbar(string message, string type)
+    {
+        this.message = message;
+         snackbarClass = type switch
+         {
+             "Info" => "bg-blue-500 text-white",
+             "Success" => "bg-green-500 text-white",
+             "Warning" => "bg-yellow-500 text-black",
+             "Danger" => "bg-red-500 text-white",
+             "Alert" => "bg-orange-500 text-black",
+             _ => "bg-gray-500 text-white"
+         };
+         isVisible = true;
+         StateHasChanged();
+
+         Task.Delay(5000).ContinueWith(_ =>
+         {
+             HideSnackbar();
+         });
+
+    }
+    
+    private void HideSnackbar()
+    {
+        isVisible = false;
+        StateHasChanged();
+    }
+
+    private void CloseSnackbar()
+    {
+        HideSnackbar();
+    }
+
+    public void Dispose()
+    {
+        SnackbarService.OnShow -= ShowSnackbar;
+        SnackbarService.OnHide -= HideSnackbar;
+    }
+}
