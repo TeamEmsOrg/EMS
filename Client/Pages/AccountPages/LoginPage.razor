@@ -71,9 +71,16 @@
 
 
 @code{
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; }
+    
     private bool ShowLoadingButton = false;
     Login User = new();
-    
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CheckUserAuthentication();
+    }
+
     public async Task HandleLogin()
     {
         ShowLoadingButton = true;
@@ -85,8 +92,22 @@
             await customAuthStateProvider.UpdateAuthenticationState(new UserSession() { Token = result.Token, RefreshToken = result.RefreshToken });
             Navigation.NavigateTo("/", forceLoad: true);
         }
+        else
+        {
+            SnackbarService.ShowSnackbar($"Unable to login {result.Message}", "Error");
+        }
 
         ShowLoadingButton = false;
+    }
+
+    private async Task CheckUserAuthentication()
+    {
+        var user = (await AuthenticationState).User;
+        bool isAuthenticated = user.Identity.IsAuthenticated;
+        if (!isAuthenticated)
+        {
+            Navigation.NavigateTo("/identity/account/login");
+        }
     }
 
 }

@@ -26,5 +26,6 @@
       <Folder Include="Services\Contracts\" />
       <Folder Include="Services\Implementations\" />
       <Folder Include="wwwroot\images\background\" />
+      <Folder Include="wwwroot\images\profile\" />
     </ItemGroup>
 </Project>

@@ -1,50 +1,64 @@
 ﻿@implements IDisposable
 @inject NavigationManager NavigationManager
 
-<div class="top-row ps-3 navbar navbar-dark flex justify-center items-center">
-    <div class="container-fluid text-white flex items-center gap-2">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        @* <p class="text-white text-xl font-medium">Hi</p> *@
-        <AuthorizeView>
-            <Authorized>
-                <span class="text-white">@context.User.Identity!.Name</span>
-            </Authorized>
-            <NotAuthorized>
-                <span class="text-white">Guest</span>
-            </NotAuthorized>
-        </AuthorizeView>
-        @* <a class="navbar-brand text-white hover:text-gray-200" href="">EMS</a> *@
-    </div>
-</div>
+<nav class="bg-gray-800">
+    <AuthorizeView>
+        <Authorized>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <!-- Logo and Brand -->
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4 text-white font-medium">
+                         @context.User.Identity!.Name
+                        </div>
+                    </div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler"/>
+                    <div>
+                        <button @onclick="ToggleNavMenu" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none">
+                            <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
+            <div class="block">
+                <div class="flex flex-col space-y-2 px-4 py-3">
+                    <NavLink href="" Match="NavLinkMatch.All" 
+                            class="nav-link px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700 transition-colors duration-200">
+                        <span class="bi bi-house-door-fill mr-2" aria-hidden="true"></span> Home
+                    </NavLink>
+                    <NavLink href="counter" 
+                            class="nav-link px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+                        <span class="bi bi-plus-square-fill mr-2" aria-hidden="true"></span> Counter
+                    </NavLink>
+                    <NavLink href="weather" 
+                            class="nav-link px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+                        <span class="bi bi-list-nested mr-2" aria-hidden="true"></span> Weather
+                    </NavLink>
+                </div>
+            </div>
+        </Authorized>
+    </AuthorizeView>
+</nav>
 
 @code {
+    private bool collapseNavMenu = true;
     private string? currentUrl;
+    [Parameter] public EventCallback<bool> OnToggleNavMenu { get; set; }
+
+    private async Task ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+        await OnToggleNavMenu.InvokeAsync(collapseNavMenu);
+
+    }
 
     protected override void OnInitialized()
     {
@@ -62,5 +76,4 @@
     {
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
-
 }

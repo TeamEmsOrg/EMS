@@ -1,6 +1,8 @@
 @page "/identity/account/register"
 @using Client.Pages.OtherPages
+@using Client.Services
 @inject NavigationManager Navigation
+@inject SnackbarService SnackbarService
 @layout AuthenticationLayout
 
 @* <div class="min-h-screen bg-gradient-to-br from-indigo-100 to-blue-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center"> *@
@@ -86,6 +88,13 @@
 @code {
     private Register registerModel = new();
     private bool ShowLoadingButton { get; set; } = false;
+    
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CheckUserAuthentication();
+    }
 
     private async Task HandleRegistration()
     {
@@ -93,10 +102,25 @@
         var result = await accountService.CreateAsync(registerModel);
         if (result.Flag)
         {
+            SnackbarService.ShowSnackbar("User registered successfully!","Success");
             Navigation.NavigateTo("/identity/account/login");
+        }
+        else
+        {
+            SnackbarService.ShowSnackbar($"Unable to register {result.Message}","Error");
         }
 
         ShowLoadingButton = false;
+    }
+
+    private async Task CheckUserAuthentication()
+    {
+        var user = (await AuthenticationState).User;
+        bool isAuthenticated = user.Identity.IsAuthenticated;
+        if (!isAuthenticated)
+        {
+            Navigation.NavigateTo("/identity/account/login");
+        }
     }
 
 }
