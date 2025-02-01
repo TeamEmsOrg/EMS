@@ -1,6 +1,5 @@
 ﻿@implements IDisposable
 @inject NavigationManager NavigationManager
-
 <nav class="bg-gray-800">
     <AuthorizeView>
         <Authorized>
@@ -14,14 +13,14 @@
                             </svg>
                         </div>
                         <div class="ml-4 text-white font-medium">
-                         @context.User.Identity!.Name
+                            @context.User.Identity!.Name
                         </div>
                     </div>
 
                     <div>
                         <button @onclick="ToggleNavMenu" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none">
                             <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                             </svg>
                         </button>
                     </div>
@@ -30,18 +29,95 @@
 
             <div class="block">
                 <div class="flex flex-col space-y-2 px-4 py-3">
-                    <NavLink href="" Match="NavLinkMatch.All" 
-                            class="nav-link px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700 transition-colors duration-200">
-                        <span class="bi bi-house-door-fill mr-2" aria-hidden="true"></span> Home
+                    <NavLink href="" Match="NavLinkMatch.All" class="nav-link flex px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700 transition-colors duration-200">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M13 5v14m-4 0h8"/>
+                        </svg>
+                        Home
                     </NavLink>
-                    <NavLink href="counter" 
-                            class="nav-link px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
-                        <span class="bi bi-plus-square-fill mr-2" aria-hidden="true"></span> Counter
+                    <NavLink href="counter" class="nav-link flex px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Counter
                     </NavLink>
-                    <NavLink href="weather" 
-                            class="nav-link px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
-                        <span class="bi bi-list-nested mr-2" aria-hidden="true"></span> Weather
+                    <NavLink href="weather" class="nav-link flex px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 108 0m9 0a4 4 0 10-8 0m-3 0a4 4 0 01-4-4m15 0a4 4 0 00-4-4"/>
+                        </svg>
+                        Weather
                     </NavLink>
+                    <NavLink @onclick="toggleDepartments" class="nav-link flex px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                        Department
+                    </NavLink>
+                    @if (showDepartmentsSubMenu)
+                    {
+                        <div class="ml-12">
+                            <NavLink href="department/hr" class="flex px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                HR
+                            </NavLink>
+                            <NavLink href="department/finance" class="flex px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m9-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Finance
+                            </NavLink>
+                            <NavLink href="department/it" class="flex px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 12.5l6.5-6.5M9.75 17.5l6.5-6.5M9.75 22.5l6.5-6.5"/>
+                                </svg>
+                                IT
+                            </NavLink>
+                        </div>
+                    }
+
+                    <NavLink @onclick="toggleAdministration" class="nav-link flex px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h11M9 21V3m4 4l-4-4-4 4m0 14l4-4 4 4"/>
+                        </svg>
+                        Administration
+                    </NavLink>
+                    @if (showAdministrationsSubMenu)
+                    {
+                        <div class="ml-12">
+                            <NavLink href="admin/users" class="flex px-4 py-2 text-sm text-gray-300 hover:bg-gray-600">
+                                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5v14"/>
+                                </svg>
+                                Users
+                            </NavLink>
+                            <NavLink href="admin/roles" class="flex px-4 py-2 text-sm text-gray-300 hover:bg-gray-600">
+                                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6h12M6 12h12M6 18h12"/>
+                                </svg>
+                                Roles
+                            </NavLink>
+                            <NavLink href="admin/settings" class="flex px-4 py-2 text-sm text-gray-300 hover:bg-gray-600">
+                                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a10 10 0 100 20 10 10 0 000-20z"/>
+                                </svg>
+                                Settings
+                            </NavLink>
+                            <NavLink href="admin/reports" class="flex px-4 py-2 text-sm text-gray-300 hover:bg-gray-600">
+                                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h8M8 12h8M8 18h8"/>
+                                </svg>
+                                Reports
+                            </NavLink>
+                            <NavLink href="admin/logs" class="flex px-4 py-2 text-sm text-gray-300 hover:bg-gray-600">
+                                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M3 12h18M3 18h18"/>
+                                </svg>
+                                Logs
+                            </NavLink>
+                        </div>
+                    }
                 </div>
             </div>
         </Authorized>
@@ -53,11 +129,13 @@
     private string? currentUrl;
     [Parameter] public EventCallback<bool> OnToggleNavMenu { get; set; }
 
+    private bool showDepartmentsSubMenu { get; set; } = false;
+    private bool showAdministrationsSubMenu { get; set; } = false;
+
     private async Task ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
         await OnToggleNavMenu.InvokeAsync(collapseNavMenu);
-
     }
 
     protected override void OnInitialized()
@@ -76,4 +154,15 @@
     {
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
+
+    private void toggleDepartments()
+    {
+        showDepartmentsSubMenu = !showDepartmentsSubMenu;
+    }
+
+    private void toggleAdministration()
+    {
+        showAdministrationsSubMenu = !showAdministrationsSubMenu;
+    }
+
 }

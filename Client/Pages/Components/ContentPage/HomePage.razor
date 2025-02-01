@@ -1,13 +1,20 @@
 @page "/home/dashboard"
 @using Client.Pages.AdministrationPages
 @inject NavigationManager NavManager
-<TableBanner/>
+@using Client.Pages.AdministrationPages
+<div class="bg-red text-white">Issidebar: @IsSidebarOpen</div>
+<div class="@(IsSidebarOpen ? "w-[calc(100%-16rem)] bg-red" : "w-full bg-red")">
+<p class="bg-red text-white">@IsSidebarOpen</p>
+    <TableBanner IsSidebarOpen="IsSidebarOpen"/>
+</div>
 
 @code {
     [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; }
+    [CascadingParameter] public bool IsSidebarOpen { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
+        
         await CheckUserAuthentication();
     }
 
@@ -20,4 +27,5 @@
             NavManager.NavigateTo("/identity/account/login");
         }
     }
+
 }

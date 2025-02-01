@@ -8,7 +8,7 @@
     @if (isSidebarOpen)
     {
         <nav class="bg-gray-800 text-gray-100 w-64 flex-shrink-0">
-            <NavMenu OnToggleNavMenu = "ToggleSidebar" />
+            <NavMenu OnToggleNavMenu="ToggleSidebar"/>
         </nav>
     }
 
@@ -16,24 +16,24 @@
     <div class="flex-1 flex flex-col w-full">
         <!-- Header -->
         <header class="flex justify-between items-center bg-gray-100 border-b border-gray-300 p-4">
-            
+
             <div class="inline-flex  justify-between items-center">
-                <button @onclick="ToggleSidebar" class="@(isSidebarOpen ? "hidden":"block") inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none)">
+                <button @onclick="ToggleSidebar" class="@(isSidebarOpen ? "hidden" : "block") inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none)">
                     <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                 </button>
                 <h1 class="text-xl font-semibold">Dashboard</h1>
             </div>
 
-                <div class="flex justify-end md:top-row px-4">
-                    <ProfileDropdown/>
-                </div>
-            
+            <div class="flex justify-end md:top-row px-4">
+                <ProfileDropdown/>
+            </div>
+
         </header>
 
         <!-- Content -->
-        <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+        <main class="flex-1 overflow-y-auto bg-gray-50">
 
             <article class="content px-4">
                 @Body
@@ -50,10 +50,13 @@
 
 @code {
     private bool isSidebarOpen = true;
+    [Parameter] public EventCallback<bool> OnSidebarToggle { get; set; }
 
-    private void ToggleSidebar()
+    private async Task ToggleSidebar()
     {
         isSidebarOpen = !isSidebarOpen;
+        await OnSidebarToggle.InvokeAsync(isSidebarOpen);
+        StateHasChanged();
     }
 
 }
