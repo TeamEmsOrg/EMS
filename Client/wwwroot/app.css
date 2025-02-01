@@ -738,14 +738,6 @@ video {
   width: 24rem;
 }
 
-.w-\[200px\] {
-  width: 200px;
-}
-
-.w-\[calc\(100\%-16rem\)\] {
-  width: calc(100% - 16rem);
-}
-
 .w-full {
   width: 100%;
 }

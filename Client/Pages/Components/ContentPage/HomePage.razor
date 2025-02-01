@@ -1,10 +1,8 @@
 @page "/home/dashboard"
 @using Client.Pages.AdministrationPages
 @inject NavigationManager NavManager
-@using Client.Pages.AdministrationPages
-<div class="bg-red text-white">Issidebar: @IsSidebarOpen</div>
-<div class="@(IsSidebarOpen ? "w-[calc(100%-16rem)] bg-red" : "w-full bg-red")">
-<p class="bg-red text-white">@IsSidebarOpen</p>
+
+<div class="w-full transition-margin duration-200">
     <TableBanner IsSidebarOpen="IsSidebarOpen"/>
 </div>
 
