@@ -1,8 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./**/*.{razor,html}"],
+  darkMode: 'class',
   theme: {
     extend: {
+      colors: {
+        gray: {
+          800: '#1f2937',
+          900: '#111827',
+        },
+      },
       keyframes: {
         'slide-in': {
           '0%': { transform: 'translateX(-100%)' },
