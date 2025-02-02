@@ -1,9 +1,11 @@
 @page "/home/dashboard"
 @using Client.Pages.AdministrationPages
+@using Client.Pages.DepartmentPages
 @inject NavigationManager NavManager
 
 <div class="w-full transition-margin duration-200">
     <TableBanner IsSidebarOpen="IsSidebarOpen"/>
+    <GeneralDepartmentPage/>
 </div>
 
 @code {

@@ -1,5 +1,8 @@
-﻿@implements IDisposable
+﻿@using Client.ApplicationStates
+@implements IDisposable
+
 @inject NavigationManager NavigationManager
+@inject DepartmentState DepartmentState
 <nav class="bg-gray-800">
     <AuthorizeView>
         <Authorized>
@@ -56,7 +59,7 @@
                     @if (showDepartmentsSubMenu)
                     {
                         <div class="ml-12">
-                            <NavLink href="department/hr" class="flex px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 flex items-center">
+                            <NavLink @onclick="GeneralDepartmentClicked" class="flex px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
@@ -163,6 +166,11 @@
     private void toggleAdministration()
     {
         showAdministrationsSubMenu = !showAdministrationsSubMenu;
+    }
+
+    private async Task GeneralDepartmentClicked()
+    {
+        DepartmentState.GeneralDepartmentClicked();
     }
 
 }
