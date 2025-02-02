@@ -20,7 +20,7 @@ builder.Services.AddHttpClient("SystemApiClient", client =>
 // builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7098/")});
 
 builder.Services.AddScoped<SnackbarService>();
-
+builder.Services.AddScoped<ThemeService>();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<GetHttpClient>();

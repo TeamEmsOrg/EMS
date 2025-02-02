@@ -1,4 +1,5 @@
 @inject IJSRuntime js
+@inject ThemeService ThemeService
 
 <div class="relative inline-block text-left">
     <button @onclick="ToggleDropdown" class="flex items-center space-x-2 focus:outline-none group">
@@ -19,7 +20,7 @@
              role="menu"
              aria-orientation="vertical"
              aria-labelledby="menu-button">
-            <div class="py-1" role="none">
+            <div class="py-1 text-gray-700 dark:bg-gray-800 dark:text-white" role="none">
             <a href="/profile"
                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -76,17 +77,9 @@
         Navigation.NavigateTo("/identity/account/login");
     }
 
-    private void ToggleTheme()
+    private async Task ToggleTheme()
     {
-        isDarkMode = !isDarkMode;
-        if (isDarkMode)
-        {
-            js.InvokeVoidAsync("document.documentElement.classList.add", "dark");
-        }
-        else
-        {
-            js.InvokeVoidAsync("document.documentElement.classList.remove", "dark");
-        }
+        await ThemeService.ToggleTheme();
     }
 
 }
