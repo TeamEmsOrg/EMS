@@ -37,17 +37,17 @@
 </div>
 
 @code {
-    private GeneralDepartmentDTO generalDepartment = new();
+    private GeneralDepartment generalDepartment = new();
 
     [Parameter]
     public EventCallback OnClose { get; set; }
 
     [Parameter]
-    public EventCallback<GeneralDepartmentDTO> OnSave { get; set; }
+    public EventCallback<GeneralDepartment> OnSave { get; set; }
 
     private async Task HandleSubmit()
     {
         await OnSave.InvokeAsync(generalDepartment);
         await OnClose.InvokeAsync();
     }
-}
+} 
