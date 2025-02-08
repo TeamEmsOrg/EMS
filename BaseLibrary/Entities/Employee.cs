@@ -1,30 +1,23 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace BaseLibrary.Entities;
 
 public class Employee : BaseEntity
-{ 
-    public int Id { get; set; }
-    public string? Name { get; set; }
-    public string? CivilId { get; set; }
-    public string? FileNumber { get; set; }
-    public string? FullName { get; set; }
-    public string? JobName { get; set; }
-    public string? Address { get; set; }
-    public string? TelephoneNumber { get; set; }
-    public string? Photo { get; set; }
-    public string? Other { get; set; }
-    
-    //relationship : many to one
-    
-    public GeneralDepartment? GeneralDepartment { get; set; }
-    public int GeneralDepartmentId { get; set; } 
-    
-    public Department? Department { get; set; }
-    public int DepartmentId { get; set; }
-    
+{
+    [Required] public string? CivilId { get; set; }
+    [Required] public string? FileNumber { get; set; }
+    [Required] public string? FullName { get; set; }
+    [Required] public string? JobName { get; set; }
+    [Required] public string? Address { get; set; }
+
+    [Required] public string? TelephoneNumber { get; set; }
+    [Required] public string? Photo { get; set; }
+    [Required] public string? Other { get; set; }
+
+    //Many to one relationship
     public Branch? Branch { get; set; }
     public int BranchId { get; set; }
-    
+
     public Town? Town { get; set; }
     public int TownId { get; set; }
-    
 }

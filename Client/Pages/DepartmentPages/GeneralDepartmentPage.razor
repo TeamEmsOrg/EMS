@@ -1,3 +1,4 @@
+@using BaseLibrary.Entities
 @using Client.ApplicationStates
 @inject DepartmentState DepartmentState
 
@@ -14,9 +15,9 @@
                                 <h3 class="text-xl font-semibold text-gray-800 dark:text-white tracking-wide">General Department</h3>
                             </div>
                             <button @onclick="AddDepartmentDialog" 
-                                    class="group inline-flex items-center px-3 py-2 border-2 text-white border-green-300 hover:bg-green-600 dark:hover:bg-gray-700 dark:border-gray-600 rounded-lg hover:border-green-600 dark:hover:border-indigo-400 transition-all duration-200">
+                                    class="group inline-flex items-center px-3 py-2 border-2 text-white border-green-300 bg-green-300 hover:bg-green-600 dark:hover:bg-gray-800 dark:bg-gray-700 dark:border-gray-600 rounded-lg hover:border-green-600 dark:hover:border-indigo-400 transition-all duration-200">
                                 <svg xmlns="http://www.w3.org/2000/svg" 
-                                     class="h-5 w-5 text-gray-500 dark:text-gray-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors duration-200" 
+                                     class="h-5 w-5 text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-indigo-400 transition-colors duration-200" 
                                      fill="none" 
                                      viewBox="0 0 24 24" 
                                      stroke="currentColor">
@@ -54,7 +55,7 @@
     }
 </div>
 @code {
-    GeneralDepartmentDTO Department = new();
+    GeneralDepartment Department = new();
     private bool _showAddDepartmentDialog = false;
 
     protected override void OnInitialized()
