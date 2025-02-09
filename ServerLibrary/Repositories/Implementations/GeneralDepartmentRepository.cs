@@ -36,7 +36,7 @@ public class GeneralDepartmentRepository(AppDbContext appDbContext) : IGenericRe
         await Commit();
         return Success();
     }
-    public async Task<GeneralResponse> DeleteById(int id)
+ public async Task<GeneralResponse> DeleteById(int id)
     {
         var department = await appDbContext.GeneralDepartments.FindAsync(id);
         if (department is null) 
