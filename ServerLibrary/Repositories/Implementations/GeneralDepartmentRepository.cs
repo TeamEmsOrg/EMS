@@ -36,19 +36,21 @@ public class GeneralDepartmentRepository(AppDbContext appDbContext) : IGenericRe
         await Commit();
         return Success();
     }
-
     public async Task<GeneralResponse> DeleteById(int id)
     {
-        var dep = await appDbContext.GeneralDepartments.FindAsync(id);
-        if (dep is null) return NotFound();
-
-        appDbContext.GeneralDepartments.Remove(dep);
-        await Commit();
-        return Success();
+        var department = await appDbContext.GeneralDepartments.FindAsync(id);
+        if (department is null) 
+        {
+            return new GeneralResponse(false, "Sorry department not found!");
+        }
+        appDbContext.GeneralDepartments.Remove(department);
+        await appDbContext.SaveChangesAsync();
+        return new GeneralResponse(true, "Process Completed!");
     }
+    
 
     private static GeneralResponse NotFound() => new GeneralResponse(false, "Sorry department not found!");
-    private static GeneralResponse Success() => new GeneralResponse(true, "Process Completed");
+    private static GeneralResponse Success() => new GeneralResponse(true, "Process Completed!");
     private async Task Commit() => await appDbContext.SaveChangesAsync();
 
     private async Task<bool> CheckName(string name)

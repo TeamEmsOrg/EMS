@@ -1,4 +1,6 @@
 using System.Text;
+using System.Text.Json.Serialization;
+using BaseLibrary.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -13,7 +15,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
+
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSwaggerGen(c =>
@@ -42,6 +49,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddScoped<IUserAccount, UserAccountRepository>();
+
+builder.Services.AddScoped<IGenericRepositoryInterface<GeneralDepartment>, GeneralDepartmentRepository>();
+builder.Services.AddScoped<IGenericRepositoryInterface<Department>, DepartmentRepository>();
+builder.Services.AddScoped<IGenericRepositoryInterface<Country>, CountryRepository>();
+builder.Services.AddScoped<IGenericRepositoryInterface<City>, CityRepository>();
+builder.Services.AddScoped<IGenericRepositoryInterface<Branch>, BranchRepository>();
+builder.Services.AddScoped<IGenericRepositoryInterface<Town>, TownRepository>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorWasm",
