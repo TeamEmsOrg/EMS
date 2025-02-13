@@ -10,14 +10,37 @@
 @using Client.Layout
 
 @using BaseLibrary.DTOs
+@using BaseLibrary.Entities
+@using Client.ApplicationStates
+@using Client.Services
 @using ClientLibrary.Helpers
 @using ClientLibrary.Services.Contracts
 @using Microsoft.AspNetCore.Components.Authorization
 @inherits LayoutComponentBase
 @using Microsoft.AspNetCore.Components.Authorization
 @using ClientLibrary.Services.Contracts
+@using ClientLibrary.Services.Implementations
 
-@inject AuthenticationStateProvider AuthStateProvider;
-@inject IUserAccountService accountService;
+@inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager Navigation
+@inject NavigationManager NavManager
+@inject SnackbarService SnackbarService
 
+@* Navbar tab communication state handling *@
+@inject AllState allState
+
+@* Authentication *@
+@inject IUserAccountService accountService
+
+@* GeneralDepartment / Department / Branch *@
+@inject IGenericServiceInterface<GeneralDepartment> generalDepartmentService
+@inject IGenericServiceInterface<Department> departmentService
+@inject IGenericServiceInterface<Branch> branchService
+
+@* Country / City / Town *@
+@inject IGenericServiceInterface<Country> countryService
+@inject IGenericServiceInterface<City> CityService
+@inject IGenericServiceInterface<Town> TownService
+
+@* Employee *@
+@inject IGenericServiceInterface<Employee> employeeService

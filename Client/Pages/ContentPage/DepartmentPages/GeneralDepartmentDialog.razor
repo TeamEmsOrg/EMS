@@ -1,0 +1,67 @@
+
+<div class="fixed inset-0 flex items-center justify-center bg-black/50 dark:bg-gray-900/50">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-96">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">General Department</h3>
+            <button @onclick="@OnClose" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <EditForm Model="@GeneralDepartment" OnValidSubmit="@HandleSubmit">
+            <DataAnnotationsValidator/>
+            <div class="mb-4">
+                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Department Name</label>
+                <InputText @bind-Value="GeneralDepartment.Name"
+                           class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:text-white"
+                           id="name"
+                           placeholder="Enter department name"/>
+                <ValidationMessage For="@(() => GeneralDepartment.Name)" class="text-red-500 dark:text-red-400 text-sm"/>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="button"
+                        @onclick="OnClose"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600">
+                    Cancel
+                </button>
+                <button type="submit"
+                        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 dark:bg-blue-500 rounded-md hover:bg-blue-700 dark:hover:bg-blue-600">
+                    Save
+                </button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [Parameter] public GeneralDepartment GeneralDepartment { get; set; } = new();
+    [Parameter] public EventCallback<GeneralDepartment> HandleSaveOperationEvent { get; set; }
+    public bool IsVisible { get; set; } = false;
+
+    public string Title { get; set; } = "Add";
+        [Parameter]
+
+    public EventCallback OnClose { get; set; }
+
+    [Parameter] public EventCallback<GeneralDepartment> OnSave { get; set; }
+
+    private async Task HandleSubmit()
+    {
+        @if (string.IsNullOrEmpty(GeneralDepartment.Name))
+        {
+            SnackbarService.ShowSnackbar("You need to provide department name","ShowUser");
+        }
+
+        await HandleSaveOperationEvent.InvokeAsync(GeneralDepartment);
+        // await OnSave.InvokeAsync(GeneralDepartment);
+        // await OnClose.InvokeAsync();
+    }
+
+    public void ChangeTitle(string title)
+    {
+        Title = title;
+    }
+
+}

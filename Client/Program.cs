@@ -41,7 +41,7 @@ builder.Services.AddScoped<IGenericServiceInterface<Town>, GenericServiceImpleme
 builder.Services.AddScoped<IGenericServiceInterface<Employee>, GenericServiceImplementation<Employee>>();
 
 
-builder.Services.AddScoped<DepartmentState>();
+builder.Services.AddScoped<AllState>();
 
 builder.Services.AddHttpClient();
 await builder.Build().RunAsync();
