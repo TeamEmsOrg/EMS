@@ -1,7 +1,6 @@
 @using Client.Services
 @inject SnackbarService SnackbarService
-
-<div class="w-96 h-32 fixed bottom-0 right-4  duration-300 ease-in-out"  style="z-index: 1000002;" @onclick="CloseSnackbar">
+<div class="w-96 fixed bottom-4 right-4 transform duration-300 ease-in-out" style="z-index: 1000002;">
     @if (isVisible)
     {
         <div class="flex items-center px-4 py-2 rounded shadow-lg @snackbarClass">
@@ -9,7 +8,6 @@
         </div>
     }
 </div>
-
 @code {
     private bool isVisible { get; set; } = false;
     private string message = string.Empty;

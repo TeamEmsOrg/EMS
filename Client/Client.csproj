@@ -28,4 +28,14 @@
       <Folder Include="wwwroot\images\background\" />
       <Folder Include="wwwroot\images\profile\" />
     </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\Components\ContentPage\HomePage.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Pages\ContentPage\DepartmentPages\GeneralDepartmentDialog.razor" />
+      <AdditionalFiles Include="Pages\ContentPage\DepartmentPages\GeneralDepartmentPage.razor" />
+      <AdditionalFiles Include="Pages\ContentPage\HomePage.razor" />
+    </ItemGroup>
 </Project>

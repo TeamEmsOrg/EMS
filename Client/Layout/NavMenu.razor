@@ -2,7 +2,7 @@
 @implements IDisposable
 
 @inject NavigationManager NavigationManager
-@inject DepartmentState DepartmentState
+@inject AllState AllState
 <nav class="bg-gray-800">
     <AuthorizeView>
         <Authorized>
@@ -170,7 +170,7 @@
 
     private async Task GeneralDepartmentClicked()
     {
-        DepartmentState.GeneralDepartmentClicked();
+        AllState.GeneralDepartmentClicked();
     }
 
 }
