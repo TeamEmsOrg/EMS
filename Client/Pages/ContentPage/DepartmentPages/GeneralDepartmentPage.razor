@@ -85,10 +85,8 @@
                     </tr>
                 }
 
-
                 </tbody>
             </table>
-
         </div>
     </div>
 }
@@ -98,15 +96,17 @@
         <GeneralDepartmentDialog @ref="generalDepartmentDialog"
                                  HandleSaveOperationEvent="HandleSaveOperationEvent"
                                  GeneralDepartment="GeneralDepartment"
+                                 Title="@Title"
                                  OnClose="closeDialog"/>
     }
 </div>
 
 @code {
-    GeneralDepartmentDialog? generalDepartmentDialog;
-    GeneralDepartment GeneralDepartment = new();
+    private GeneralDepartmentDialog? generalDepartmentDialog;
+    private GeneralDepartment GeneralDepartment = new();
     public string Title { get; set; } = "Add";
     private List<GeneralDepartment> GeneralDepartments { get; set; } = new();
+    private bool _showAddDepartmentDialog = false;
     public bool Loading { get; set; } = false;
 
     private async Task GetGeneralDepartments()
@@ -120,30 +120,31 @@
     {
         Loading = true;
         if (generalDepartment.Id > 0)
-        {
+        { 
+            ChangeTitle("Add");
             var result = await generalDepartmentService.Update(generalDepartment, Constants.GeneralDepartmentBaseUrl);
-            _showAddDepartmentDialog = false;
+            closeDialog();
             Loading = false;
             await DisplayMessage(result.Flag, result.Message);
         }
         else
         {
+            ChangeTitle("Update");
             var result = await generalDepartmentService.Insert(generalDepartment, Constants.GeneralDepartmentBaseUrl);
-            _showAddDepartmentDialog = false;
+            closeDialog();
             Loading = false;
             await DisplayMessage(result.Flag, result.Message);
         }
 
         await GetGeneralDepartments();
-        generalDepartmentDialog?.ChangeTitle("Add");
         Loading = false;
         StateHasChanged();
     }
 
     private void EditClicked(GeneralDepartment dep)
     {
-        // generalDepartmentDialog?.ChangeTitle("Update");
         Loading = true;
+        ChangeTitle("Update");
         GeneralDepartment = dep;
         Loading = false;
         _showAddDepartmentDialog = true;
@@ -158,7 +159,6 @@
         StateHasChanged();
     }
 
-    private bool _showAddDepartmentDialog = false;
 
     public void Dispose()
     {
@@ -173,6 +173,7 @@
 
     private void AddDepartmentDialog()
     {
+        GeneralDepartment = new GeneralDepartment();
         _showAddDepartmentDialog = !_showAddDepartmentDialog;
     }
 
@@ -199,6 +200,11 @@
             SnackbarService.ShowSnackbar($"{message}", "Error");
             return false;
         }
+    }
+    
+    public  void ChangeTitle(string title)
+    {
+        Title = title;
     }
 
 }
