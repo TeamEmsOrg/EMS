@@ -1,6 +1,13 @@
 @using BaseLibrary.Entities
+@using BaseLibrary.Responses
 @using Client.ApplicationStates
+@using Client.Pages.OtherPages
 @inject AllState AllState
+
+@if (Loading)
+{
+    <LinearLoading></LinearLoading>
+}
 
 @if (AllState.ShowGeneralDepartment)
 {
@@ -40,14 +47,13 @@
                     int count = 1;
                     foreach (var item in GeneralDepartments)
                     {
-                      
                         <tr>
                             <th scope="row" class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">@count</th>
                             <td class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">@item.Id</td>
                             <td class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"> @item.Name</td>
                             <td class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                <button 
-                                    class="group inline-flex items-center px-3 py-2 border-2 text-white border-blue-400 bg-blue-400 hover:bg-blue-600 dark:hover:bg-gray-800 dark:bg-gray-700 dark:border-gray-600 rounded-lg hover:border-blue-600 dark:hover:border-indigo-400 transition-all duration-200">
+                                <button @onclick="() => EditClicked(item)"
+                                        class="group inline-flex items-center px-3 py-2 border-2 text-white border-blue-400 bg-blue-400 hover:bg-blue-600 dark:hover:bg-gray-800 dark:bg-gray-700 dark:border-gray-600 rounded-lg hover:border-blue-600 dark:hover:border-indigo-400 transition-all duration-200">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                          class="h-5 w-5 text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-indigo-400 transition-colors duration-200"
                                          fill="none"
@@ -56,7 +62,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
                                     </svg>
                                 </button>
-                                <button 
+                                <button @onclick="() => DeleteClicked(item)"
                                     class="group inline-flex items-center px-3 py-2 border-2 text-white border-red-400 bg-red-400 hover:bg-red-600 dark:hover:bg-gray-800 dark:bg-gray-700 dark:border-gray-600 rounded-lg hover:border-red-600 dark:hover:border-indigo-400 transition-all duration-200">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                          class="h-5 w-5 text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-indigo-400 transition-colors duration-200"
@@ -68,16 +74,17 @@
                                 </button>
                             </td>
                         </tr>
+
                         count++;
                     }
                 }
                 else
                 {
                     <tr>
-                        <td colspan="6">No Departments added yet!</td>
+                        <td colspan="6" class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 tracking-wider">No Departments added yet!</td>
                     </tr>
                 }
-               
+
 
                 </tbody>
             </table>
@@ -99,60 +106,72 @@
     GeneralDepartmentDialog? generalDepartmentDialog;
     GeneralDepartment GeneralDepartment = new();
     public string Title { get; set; } = "Add";
-    public List<GeneralDepartment> GeneralDepartments { get; set; } = new();
-    
-    protected async override Task OnInitializedAsync()
-    {
-        await GetGeneralDepartments();
-        AllState.Action += StateHasChanged;
-    }
+    private List<GeneralDepartment> GeneralDepartments { get; set; } = new();
+    public bool Loading { get; set; } = false;
 
-    public async Task GetGeneralDepartments()
+    private async Task GetGeneralDepartments()
     {
+        Loading = true;
         GeneralDepartments = await generalDepartmentService.GetAll(Constants.GeneralDepartmentBaseUrl);
+        Loading = false;
     }
 
     private async Task HandleSaveOperationEvent(GeneralDepartment generalDepartment)
     {
-        bool successCheck = false;
+        Loading = true;
         if (generalDepartment.Id > 0)
         {
             var result = await generalDepartmentService.Update(generalDepartment, Constants.GeneralDepartmentBaseUrl);
-            SnackbarService.ShowSnackbar($"{result.Message} {result.Flag}","Success");
+            _showAddDepartmentDialog = false;
+            Loading = false;
+            await DisplayMessage(result.Flag, result.Message);
         }
         else
         {
             var result = await generalDepartmentService.Insert(generalDepartment, Constants.GeneralDepartmentBaseUrl);
-            SnackbarService.ShowSnackbar($"{result.Message} {result.Flag}","Success");
-
-            
+            _showAddDepartmentDialog = false;
+            Loading = false;
+            await DisplayMessage(result.Flag, result.Message);
         }
 
-        await GetGeneralDepartments(); 
+        await GetGeneralDepartments();
         generalDepartmentDialog?.ChangeTitle("Add");
+        Loading = false;
         StateHasChanged();
     }
 
     private void EditClicked(GeneralDepartment dep)
     {
-        generalDepartmentDialog?.ChangeTitle("Update");
+        // generalDepartmentDialog?.ChangeTitle("Update");
+        Loading = true;
         GeneralDepartment = dep;
-        OpenDialog();
+        Loading = false;
+        _showAddDepartmentDialog = true;
     }
-    
+
+    private async Task DeleteClicked(GeneralDepartment item)
+    {
+        Loading = true;
+        await generalDepartmentService.Delete(item.Id, Constants.GeneralDepartmentBaseUrl);
+        await GetGeneralDepartments();
+        Loading = false;
+        StateHasChanged();
+    }
+
     private bool _showAddDepartmentDialog = false;
-    
+
     public void Dispose()
     {
         AllState.Action -= StateHasChanged;
     }
 
-    public void OpenDialog()
+    private void OpenDialog()
     {
+        _showAddDepartmentDialog = true;
         // generalDepartmentDialog?.OpenDialog();
     }
 
-    public void AddDepartmentDialog()
+    private void AddDepartmentDialog()
     {
         _showAddDepartmentDialog = !_showAddDepartmentDialog;
     }
@@ -160,6 +179,26 @@
     public void closeDialog()
     {
         _showAddDepartmentDialog = false;
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await GetGeneralDepartments();
+        AllState.Action += StateHasChanged;
+    }
+
+    private async Task<bool> DisplayMessage(bool flag, string message)
+    {
+        if (flag != null)
+        {
+            SnackbarService.ShowSnackbar($"{message}", "Success");
+            return true;
+        }
+        else
+        {
+            SnackbarService.ShowSnackbar($"{message}", "Error");
+            return false;
+        }
     }
 
 }
