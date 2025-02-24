@@ -117,10 +117,10 @@
     {
         var user = (await AuthenticationState).User;
         bool isAuthenticated = user.Identity.IsAuthenticated;
-        if (!isAuthenticated)
-        {
-            Navigation.NavigateTo("/identity/account/login");
-        }
+        // if (!isAuthenticated)
+        // {
+        //     Navigation.NavigateTo("/identity/account/login");
+        // }
     }
 
 }
