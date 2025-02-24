@@ -22,7 +22,7 @@
              aria-labelledby="menu-button">
             <div class="py-1 text-gray-700 dark:bg-gray-800 dark:text-white" role="none">
             <a href="/profile"
-               class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors duration-200">
+               class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-50 hover:text-blue-600 transition-colors duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg"
                      class="h-4 w-4 sm:h-5 sm:w-5 mr-3"
                      viewBox="0 0 20 20"
@@ -30,18 +30,19 @@
                     <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                 </svg>
                 <span>Profile</span>
-                </a>
+            </a>
 
-                <div class="border-t border-gray-100 my-1"></div>
+            <div class="border-t border-gray-100 my-1"></div>
 
-                <button @onclick="ToggleTheme" class="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
-                    </svg>
-                    <span>Toggle Theme</span>
-                </button>
+            <button @onclick="ToggleTheme" 
+                    class="flex w-full items-center px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-50 hover:text-blue-600 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                </svg>
+                <span>Toggle Theme</span>
+            </button>
 
-                <div class="border-t border-gray-100 my-1"></div>
+            <div class="border-t border-gray-100 my-1"></div>
                 <button @onclick="LogoutClicked"
                         class="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-50 hover:text-red-700 transition-colors duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg"
