@@ -1,4 +1,4 @@
-@page "/general-department"
+@* @page "/department" *@
 @using Client.Pages.OtherPages
 @inject AllState AllState
 
@@ -7,7 +7,7 @@
     <LinearLoading></LinearLoading>
 }
 
-@if (AllState.ShowGeneralDepartment)
+@if (AllState.ShowDepartment)
 {
     <div class="container mx-auto p-6">
         <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
@@ -17,7 +17,7 @@
                         <div class="flex justify-between items-center mb-6">
                             <div class="flex items-center space-x-3">
                                 <div class="h-8 w-1 bg-gradient-to-b from-indigo-500 to-blue-500 rounded-full"></div>
-                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white tracking-wide">General Department</h3>
+                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white tracking-wide">Department</h3>
                             </div>
                             <button @onclick="AddDepartmentDialog"
                                     class="group inline-flex items-center px-3 py-2 border-2 text-white border-green-300 bg-green-300 hover:bg-green-600 dark:hover:bg-gray-800 dark:bg-gray-700 dark:border-gray-600 rounded-lg hover:border-green-600 dark:hover:border-indigo-400 transition-all duration-200">
@@ -36,19 +36,23 @@
                 <tr>
                     <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">#</th>
                     <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Id</th>
+                    <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Department</th>
                     <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">General Department</th>
                     <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
                 </tr>
                 <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                @if (GeneralDepartments.Any())
+                @if (Departments.Any())
                 {
                     int count = 1;
-                    foreach (var item in GeneralDepartments)
+                    foreach (var item in Departments)
                     {
                         <tr>
                             <th scope="row" class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">@count</th>
                             <td class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">@item.Id</td>
-                            <td class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"> @item.Name</td>
+                            <td class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">@item.Name</td>
+                            <td class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                @(GeneralDepartments.FirstOrDefault(g => g.Id == item.GeneralDepartmentId)?.Name)
+                            </td>
                             <td class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                 <button @onclick="() => EditClicked(item)"
                                         class="group inline-flex items-center px-3 py-2 border-2 text-white border-blue-400 bg-blue-400 hover:bg-blue-600 dark:hover:bg-gray-800 dark:bg-gray-700 dark:border-gray-600 rounded-lg hover:border-blue-600 dark:hover:border-indigo-400 transition-all duration-200">
@@ -72,7 +76,6 @@
                                 </button>
                             </td>
                         </tr>
-
                         count++;
                     }
                 }
@@ -82,23 +85,21 @@
                         <td colspan="6" class="px-8 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 tracking-wider">No Departments added yet!</td>
                     </tr>
                 }
-
                 </tbody>
             </table>
         </div>
     </div>
 }
 
-<div>
-    @if (_showAddDepartmentDialog)
-    {
-        <GeneralDepartmentDialog @ref="generalDepartmentDialog"
-                                 HandleSaveOperationEvent="HandleSaveOperationEvent"
-                                 GeneralDepartment="GeneralDepartment"
-                                 Title="@Title"
-                                 OnClose="closeDialog"/>
-    }
-</div>
+@if (_showAddDepartmentDialog)
+{
+    <DepartmentDialog
+        Department="@Department"
+        GeneralDepartments="@GeneralDepartments"
+        HandleSaveOperationEvent="@HandleSaveOperationEvent"
+        OnClose="@CloseDialog"
+        Title="@Title"/>
+}
 
 
 @if (showDeleteConfirmationDialog)
@@ -131,20 +132,31 @@
 }
 
 @code {
-    private GeneralDepartmentDialog? generalDepartmentDialog;
-    private GeneralDepartment GeneralDepartment = new();
-    public string Title { get; set; } = "Add";
-    private List<GeneralDepartment> GeneralDepartments { get; set; } = new();
-    private bool _showAddDepartmentDialog = false;
-    private GeneralDepartment? departmentToDelete;
-    
+    private List<Department> Departments { get; set; } = new();
     public bool Loading { get; set; } = false;
+
+    private List<GeneralDepartment> GeneralDepartments { get; set; } = new();
+
+    private DepartmentDialog? departmentDialog;
+    private Department Department = new();
+
+    public string Title { get; set; } = "Add";
+    private bool _showAddDepartmentDialog = false;
+    private Department? departmentToDelete;
     public bool showDeleteConfirmationDialog { get; set; } = false;
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
+        await GetDepartments();
         await GetGeneralDepartments();
         AllState.Action += StateHasChanged;
+    }
+
+    private async Task GetDepartments()
+    {
+        Loading = true;
+        Departments = await departmentService.GetAll(Constants.DepartmentBaseUrl);
+        Loading = false;
     }
 
     private async Task GetGeneralDepartments()
@@ -154,41 +166,46 @@
         Loading = false;
     }
 
-    private async Task HandleSaveOperationEvent(GeneralDepartment generalDepartment)
+    public void Dispose()
+    {
+        AllState.Action -= StateHasChanged;
+    }
+
+    private async Task HandleSaveOperationEvent(Department department)
     {
         Loading = true;
-        if (generalDepartment.Id > 0)
+        if (department.Id > 0)
         {
             ChangeTitle("Add");
-            var result = await generalDepartmentService.Update(generalDepartment, Constants.GeneralDepartmentBaseUrl);
-            closeDialog();
+            var result = await departmentService.Update(department, Constants.DepartmentBaseUrl);
+            CloseDialog();
             Loading = false;
             await DisplayMessage(result.Flag, result.Message);
         }
         else
         {
             ChangeTitle("Update");
-            var result = await generalDepartmentService.Insert(generalDepartment, Constants.GeneralDepartmentBaseUrl);
-            closeDialog();
+            var result = await departmentService.Insert(department, Constants.DepartmentBaseUrl);
+            CloseDialog();
             Loading = false;
             await DisplayMessage(result.Flag, result.Message);
         }
 
-        await GetGeneralDepartments();
+        await GetDepartments();
         Loading = false;
         StateHasChanged();
     }
 
-    private void EditClicked(GeneralDepartment dep)
+    private void EditClicked(Department dep)
     {
         Loading = true;
         ChangeTitle("Update");
-        GeneralDepartment = dep;
+        Department = dep;
         Loading = false;
         _showAddDepartmentDialog = true;
     }
 
-    private void DeleteClicked(GeneralDepartment item)
+    private void DeleteClicked(Department item)
     {
         departmentToDelete = item;
         showDeleteConfirmationDialog = true;
@@ -199,8 +216,8 @@
         if (departmentToDelete != null)
         {
             Loading = true;
-            await generalDepartmentService.Delete(departmentToDelete.Id, Constants.GeneralDepartmentBaseUrl);
-            await GetGeneralDepartments();
+            await departmentService.Delete(departmentToDelete.Id, Constants.DepartmentBaseUrl);
+            await GetDepartments();
             Loading = false;
             showDeleteConfirmationDialog = false;
             departmentToDelete = null;
@@ -214,24 +231,13 @@
         departmentToDelete = null;
     }
 
-    public void Dispose()
-    {
-        AllState.Action -= StateHasChanged;
-    }
-
-    private void OpenDialog()
-    {
-        _showAddDepartmentDialog = true;
-        // generalDepartmentDialog?.OpenDialog();
-    }
-
     private void AddDepartmentDialog()
     {
-        GeneralDepartment = new GeneralDepartment();
+        Department = new Department();
         _showAddDepartmentDialog = !_showAddDepartmentDialog;
     }
 
-    public void closeDialog()
+    public void CloseDialog()
     {
         _showAddDepartmentDialog = false;
     }
@@ -256,4 +262,3 @@
     }
 
 }
-

@@ -48,7 +48,7 @@
     {
         if (string.IsNullOrEmpty(GeneralDepartment.Name))
         {
-            SnackbarService.ShowSnackbar("You need to provide department name", "ShowUser");
+            SnackbarService.ShowSnackbar("You need to provide department name", "Alert");
         }
         await HandleSaveOperationEvent.InvokeAsync(GeneralDepartment);
     }
